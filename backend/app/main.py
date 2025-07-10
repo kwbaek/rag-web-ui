@@ -30,7 +30,7 @@ async def startup_event():
     # Run database migrations
     migrator = DatabaseMigrator(settings.get_database_url)
     migrator.run_migrations()
-    
+
     # Pre-load Hugging Face models
     print("Pre-loading Hugging Face models...")
     try:
