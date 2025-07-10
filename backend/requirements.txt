@@ -39,3 +39,4 @@ langchain-community[llms]>=0.0.10
 torch>=2.0.0
 accelerate>=0.20.0
 bitsandbytes>=0.41.0
+langchain-huggingface>=0.0.1

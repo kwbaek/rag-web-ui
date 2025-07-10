@@ -16,11 +16,18 @@ services:
       minio:
         condition: service_started
     restart: on-failure
+    runtime: nvidia
     deploy:
       restart_policy:
         condition: on-failure
         delay: 5s
         max_attempts: 3
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: all
+              capabilities: [gpu]
 
   frontend:
     build: ./frontend
