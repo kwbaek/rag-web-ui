@@ -31,3 +31,11 @@ torch>=2.0.0
 accelerate>=0.20.0
 bitsandbytes>=0.41.0
 docx2txt==0.8
+sentence-transformers>=2.2.2
+transformers>=4.36.0
+huggingface-hub>=0.20.0
+langchain-community[embeddings]>=0.0.10
+langchain-community[llms]>=0.0.10
+torch>=2.0.0
+accelerate>=0.20.0
+bitsandbytes>=0.41.0
