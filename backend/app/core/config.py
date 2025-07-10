@@ -91,6 +91,7 @@ class Settings(BaseSettings):
     HUGGINGFACE_LLM_MAX_LENGTH: int = int(os.getenv("HUGGINGFACE_LLM_MAX_LENGTH", "2048"))
     HUGGINGFACE_LLM_LOAD_IN_8BIT: bool = os.getenv("HUGGINGFACE_LLM_LOAD_IN_8BIT", "false").lower() == "true"
     HUGGINGFACE_LLM_LOAD_IN_4BIT: bool = os.getenv("HUGGINGFACE_LLM_LOAD_IN_4BIT", "false").lower() == "true"
+    HUGGINGFACE_HUB_TOKEN: str = os.getenv("HUGGINGFACE_HUB_TOKEN", "")
 
     class Config:
         env_file = ".env"

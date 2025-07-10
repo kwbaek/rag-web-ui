@@ -5,6 +5,10 @@ from langchain_deepseek import ChatDeepSeek
 from langchain_ollama import OllamaLLM
 from langchain_community.llms import HuggingFacePipeline
 from app.core.config import settings
+import logging
+import os
+
+logger = logging.getLogger(__name__)
 
 class LLMFactory:
     @staticmethod
@@ -47,6 +51,16 @@ class LLMFactory:
             # Initialize Hugging Face local model
             from transformers import AutoTokenizer, AutoModelForCausalLM, pipeline, BitsAndBytesConfig
             
+            # Hugging Face 토큰 명시적 설정
+            if hasattr(settings, 'HUGGINGFACE_HUB_TOKEN') and settings.HUGGINGFACE_HUB_TOKEN:
+                os.environ['HUGGINGFACE_HUB_TOKEN'] = settings.HUGGINGFACE_HUB_TOKEN
+                from huggingface_hub import login
+                login(settings.HUGGINGFACE_HUB_TOKEN)
+                logger.info(f"[LLMFactory] Hugging Face token set: {settings.HUGGINGFACE_HUB_TOKEN[:10]}...")
+            else:
+                logger.warning("[LLMFactory] No Hugging Face token found in settings")
+            
+            logger.info(f"[LLMFactory] Loading Hugging Face tokenizer: {settings.HUGGINGFACE_LLM_MODEL}")
             tokenizer = AutoTokenizer.from_pretrained(settings.HUGGINGFACE_LLM_MODEL)
             
             # GPU 메모리 최적화 설정
@@ -59,14 +73,14 @@ class LLMFactory:
                 )
             elif settings.HUGGINGFACE_LLM_LOAD_IN_8BIT:
                 quantization_config = BitsAndBytesConfig(load_in_8bit=True)
-            
+            logger.info(f"[LLMFactory] Loading Hugging Face model: {settings.HUGGINGFACE_LLM_MODEL} (device={settings.HUGGINGFACE_LLM_DEVICE}, quant={quantization_config})")
             model = AutoModelForCausalLM.from_pretrained(
                 settings.HUGGINGFACE_LLM_MODEL,
                 device_map=settings.HUGGINGFACE_LLM_DEVICE,
                 quantization_config=quantization_config,
                 torch_dtype="auto" if settings.HUGGINGFACE_LLM_DEVICE == "cuda" else None
             )
-            
+            logger.info(f"[LLMFactory] Creating pipeline for model: {settings.HUGGINGFACE_LLM_MODEL}")
             pipe = pipeline(
                 "text-generation",
                 model=model,
@@ -75,7 +89,7 @@ class LLMFactory:
                 temperature=temperature,
                 device=settings.HUGGINGFACE_LLM_DEVICE
             )
-            
+            logger.info(f"[LLMFactory] HuggingFacePipeline created successfully for model: {settings.HUGGINGFACE_LLM_MODEL}")
             return HuggingFacePipeline(pipeline=pipe)
         # Add more providers here as needed
         # elif provider.lower() == "anthropic":

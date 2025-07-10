@@ -30,6 +30,28 @@ async def startup_event():
     # Run database migrations
     migrator = DatabaseMigrator(settings.get_database_url)
     migrator.run_migrations()
+    
+    # Pre-load Hugging Face models
+    print("Pre-loading Hugging Face models...")
+    try:
+        # Pre-load LLM model if using Hugging Face
+        if settings.CHAT_PROVIDER.lower() == "huggingface_local":
+            print(f"Pre-loading LLM model: {settings.HUGGINGFACE_LLM_MODEL}")
+            from app.services.llm.llm_factory import LLMFactory
+            llm = LLMFactory.create()
+            print("LLM model loaded successfully!")
+        
+        # Pre-load Embedding model if using Hugging Face
+        if settings.EMBEDDINGS_PROVIDER.lower() == "huggingface":
+            print(f"Pre-loading Embedding model: {settings.HUGGINGFACE_EMBEDDINGS_MODEL}")
+            from app.services.embedding.embedding_factory import EmbeddingsFactory
+            embeddings = EmbeddingsFactory.create()
+            print("Embedding model loaded successfully!")
+        
+        print("All Hugging Face models pre-loaded successfully!")
+    except Exception as e:
+        print(f"Warning: Failed to pre-load models: {e}")
+        print("Models will be loaded on first request.")
 
 
 @app.get("/")
