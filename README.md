@@ -267,6 +267,11 @@ docker compose -f docker-compose.dev.yml up -d --build
 | DEEPSEEK_MODEL    | DeepSeek Model Name   | -                         | Required for DeepSeek |
 | OLLAMA_API_BASE   | Ollama API Base URL   | http://localhost:11434    | Required for Ollama   |
 | OLLAMA_MODEL      | Ollama Model Name     | llama2                    | Required for Ollama   |
+| HUGGINGFACE_LLM_MODEL | Hugging Face Model Name | google/gemma-3-27b-it | Required for Hugging Face |
+| HUGGINGFACE_LLM_DEVICE | Hugging Face Device | cuda | Optional for Hugging Face |
+| HUGGINGFACE_LLM_MAX_LENGTH | Max Length | 2048 | Optional for Hugging Face |
+| HUGGINGFACE_LLM_LOAD_IN_8BIT | Load in 8-bit | false | Optional for Hugging Face |
+| HUGGINGFACE_LLM_LOAD_IN_4BIT | Load in 4-bit | false | Optional for Hugging Face |
 
 ### Embedding Configuration
 

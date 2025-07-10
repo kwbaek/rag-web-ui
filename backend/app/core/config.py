@@ -35,7 +35,8 @@ class Settings(BaseSettings):
     CHAT_PROVIDER: str = os.getenv("CHAT_PROVIDER", "openai")
 
     # Embeddings settings
-    EMBEDDINGS_PROVIDER: str = os.getenv("EMBEDDINGS_PROVIDER", "openai")
+    # EMBEDDINGS_PROVIDER: str = os.getenv("EMBEDDINGS_PROVIDER", "openai")
+    EMBEDDINGS_PROVIDER: str = os.getenv("EMBEDDINGS_PROVIDER", "huggingface")
 
     # MinIO settings
     MINIO_ENDPOINT: str = os.getenv("MINIO_ENDPOINT", "localhost:9000")
@@ -66,8 +67,8 @@ class Settings(BaseSettings):
 
     # Deepseek settings
     DEEPSEEK_API_KEY: str = ""
-    DEEPSEEK_API_BASE: str = "https://api.deepseek.com/v1"  # 默认 API 地址
-    DEEPSEEK_MODEL: str = "deepseek-chat"  # 默认模型名称
+    DEEPSEEK_API_BASE: str = "https://api.deepseek.com/v1"  # 기본 API 주소
+    DEEPSEEK_MODEL: str = "deepseek-chat"  # 기본 모델 이름
 
     # Ollama settings
     OLLAMA_API_BASE: str = "http://localhost:11434"
@@ -75,6 +76,21 @@ class Settings(BaseSettings):
     OLLAMA_EMBEDDINGS_MODEL: str = os.getenv(
         "OLLAMA_EMBEDDINGS_MODEL", "nomic-embed-text"
     )  # Added this line
+
+    # Hugging Face settings
+    HUGGINGFACE_EMBEDDINGS_MODEL: str = os.getenv(
+        "HUGGINGFACE_EMBEDDINGS_MODEL", "sentence-transformers/all-MiniLM-L6-v2"
+    )
+    HUGGINGFACE_DEVICE: str = os.getenv("HUGGINGFACE_DEVICE", "cuda")
+    
+    # Hugging Face LLM settings
+    HUGGINGFACE_LLM_MODEL: str = os.getenv(
+        "HUGGINGFACE_LLM_MODEL", "google/gemma-3-27b-it"
+    )
+    HUGGINGFACE_LLM_DEVICE: str = os.getenv("HUGGINGFACE_LLM_DEVICE", "cuda")
+    HUGGINGFACE_LLM_MAX_LENGTH: int = int(os.getenv("HUGGINGFACE_LLM_MAX_LENGTH", "2048"))
+    HUGGINGFACE_LLM_LOAD_IN_8BIT: bool = os.getenv("HUGGINGFACE_LLM_LOAD_IN_8BIT", "false").lower() == "true"
+    HUGGINGFACE_LLM_LOAD_IN_4BIT: bool = os.getenv("HUGGINGFACE_LLM_LOAD_IN_4BIT", "false").lower() == "true"
 
     class Config:
         env_file = ".env"

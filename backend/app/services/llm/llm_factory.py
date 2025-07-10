@@ -3,6 +3,7 @@ from langchain_core.language_models import BaseChatModel
 from langchain_openai import ChatOpenAI
 from langchain_deepseek import ChatDeepSeek
 from langchain_ollama import OllamaLLM
+from langchain_community.llms import HuggingFacePipeline
 from app.core.config import settings
 
 class LLMFactory:
@@ -42,6 +43,40 @@ class LLMFactory:
                 temperature=temperature,
                 streaming=streaming
             )
+        elif provider.lower() == "huggingface_local":
+            # Initialize Hugging Face local model
+            from transformers import AutoTokenizer, AutoModelForCausalLM, pipeline, BitsAndBytesConfig
+            
+            tokenizer = AutoTokenizer.from_pretrained(settings.HUGGINGFACE_LLM_MODEL)
+            
+            # GPU 메모리 최적화 설정
+            quantization_config = None
+            if settings.HUGGINGFACE_LLM_LOAD_IN_4BIT:
+                quantization_config = BitsAndBytesConfig(
+                    load_in_4bit=True,
+                    bnb_4bit_compute_dtype="float16",
+                    bnb_4bit_quant_type="nf4"
+                )
+            elif settings.HUGGINGFACE_LLM_LOAD_IN_8BIT:
+                quantization_config = BitsAndBytesConfig(load_in_8bit=True)
+            
+            model = AutoModelForCausalLM.from_pretrained(
+                settings.HUGGINGFACE_LLM_MODEL,
+                device_map=settings.HUGGINGFACE_LLM_DEVICE,
+                quantization_config=quantization_config,
+                torch_dtype="auto" if settings.HUGGINGFACE_LLM_DEVICE == "cuda" else None
+            )
+            
+            pipe = pipeline(
+                "text-generation",
+                model=model,
+                tokenizer=tokenizer,
+                max_length=settings.HUGGINGFACE_LLM_MAX_LENGTH,
+                temperature=temperature,
+                device=settings.HUGGINGFACE_LLM_DEVICE
+            )
+            
+            return HuggingFacePipeline(pipeline=pipe)
         # Add more providers here as needed
         # elif provider.lower() == "anthropic":
         #     return ChatAnthropic(...)

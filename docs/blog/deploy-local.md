@@ -60,6 +60,8 @@ cp .env.example .env
 
 编辑 .env 文件，配置如下：
 
+**方案一：使用 Ollama（推荐）**
+
 ````env
 # LLM 配置
 CHAT_PROVIDER=ollama
@@ -68,6 +70,37 @@ OLLAMA_MODEL=deepseek-r1:7b
 # Embedding 配置
 EMBEDDINGS_PROVIDER=ollama
 OLLAMA_EMBEDDINGS_MODEL=nomic-embed-text
+
+# 向量数据库配置
+VECTOR_STORE_TYPE=chroma
+CHROMA_DB_HOST=chromadb
+CHROMA_DB_PORT=8000
+
+# MySQL 配置
+MYSQL_SERVER=db
+MYSQL_USER=ragwebui
+MYSQL_PASSWORD=ragwebui
+MYSQL_DATABASE=ragwebui
+
+# MinIO 配置
+MINIO_ENDPOINT=minio:9000
+MINIO_ACCESS_KEY=minioadmin
+MINIO_SECRET_KEY=minioadmin
+MINIO_BUCKET_NAME=documents
+````
+
+**方案二：使用 Hugging Face（无需 API Key）**
+
+````env
+# LLM 配置
+CHAT_PROVIDER=huggingface_local
+HUGGINGFACE_LLM_MODEL=google/gemma-3-27b-it
+HUGGINGFACE_LLM_DEVICE=cpu
+HUGGINGFACE_LLM_MAX_LENGTH=2048
+# Embedding 配置
+EMBEDDINGS_PROVIDER=huggingface
+HUGGINGFACE_EMBEDDINGS_MODEL=sentence-transformers/all-MiniLM-L6-v2
+HUGGINGFACE_DEVICE=cpu
 
 # 向量数据库配置
 VECTOR_STORE_TYPE=chroma

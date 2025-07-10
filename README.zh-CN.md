@@ -277,6 +277,9 @@ docker compose -f docker-compose.dev.yml up -d --build
 | DEEPSEEK_MODEL    | DeepSeek 模型名称     | -                         | 使用 DeepSeek 时必填                   |
 | OLLAMA_API_BASE   | Ollama API 基础 URL   | http://localhost:11434    | 使用 Ollama 时必填, 注意需要先拉取模型 |
 | OLLAMA_MODEL      | Ollama 模型名称       | -                         | 使用 Ollama 时必填                     |
+| HUGGINGFACE_LLM_MODEL | Hugging Face 模型名称 | google/gemma-3-27b-it | 使用 Hugging Face 时必填               |
+| HUGGINGFACE_LLM_DEVICE | Hugging Face 设备 | cpu | 使用 Hugging Face 时可选               |
+| HUGGINGFACE_LLM_MAX_LENGTH | 最大长度 | 2048 | 使用 Hugging Face 时可选               |
 
 ### Embedding 配置
 
